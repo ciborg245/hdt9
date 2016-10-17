@@ -42,7 +42,7 @@ public class main {
         if (resp == 1)
             diccionario = new SplayTree<Association<String, String>>();
         /*else if (resp == 2)
-            diccionario = */
+            diccionario = new HashMap<Association<String, String>>();*/
 
         //Se trata de leer el archivo en el directorio actual, donde se encuentran los archivos .java
         try (BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "\\Spanish.txt"))) {
