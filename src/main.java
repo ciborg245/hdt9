@@ -8,7 +8,7 @@
     Este programa utiliza implementaciones de SplayTree y Hash para usar un diccionario y traducir un texto
  */
 
-import java.util.*;
+import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class main {
 
     public static void main(String[] args) {
         Scanner teclado = new Scanner(System.in); //Variable para leer los datos ingresados por el usuario
-        Map<Association<String, String>> diccionario = null;
+        Map<String, Association<String, String>> diccionario = null;
         String linea, key, value;
         boolean respFlag = false;
         int resp = 0;
@@ -39,10 +39,11 @@ public class main {
             }
         }
 
+        // Se utiliza la implementacion de Factory para instanciar el diccinario segun la opcion elegida por el usuario
         if (resp == 1)
-            diccionario = new SplayTree<Association<String, String>>();
-        /*else if (resp == 2)
-            diccionario = new HashMap<Association<String, String>>();*/
+            diccionario = new SplayTreeMap<>(); //Si hay varias entradas con la misma key el SplayTree guarda el primero encontrado en el archivo
+        else if (resp == 2)
+            diccionario = new OwnHashMap<>(); //Si hay varias entradas con la misma key el HashMap guarda todos los datos pero muestra el ultimo ingresado a la hora de buscar
 
         //Se trata de leer el archivo en el directorio actual, donde se encuentran los archivos .java
         try (BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "\\Spanish.txt"))) {
@@ -84,8 +85,8 @@ public class main {
 
                 //Se agrega la entrada al arbol
                 Association<String, String> temp = new Association<>(key, value);
-                //System.out.println(temp);
-                diccionario.insert(temp);
+                System.out.println(temp);
+                diccionario.put(temp.getKey(), temp);
 
                 //Se lee una nueva linea
                 linea = br.readLine();
@@ -119,11 +120,11 @@ public class main {
                 if (Character.isLetter(c)) {
                     palabra += c;
 
-                //Cuando encuentra algo que no es una letra, se usa la palabra que se fue construyendo para buscarla en el diccionario y traducirla
+                    //Cuando encuentra algo que no es una letra, se usa la palabra que se fue construyendo para buscarla en el diccionario y traducirla
                 } else  if (palabra.length() > 0){
                     //Se busca la palabra en el diccionario
-                    Association<String, String> temp = new Association<String, String>(palabra);
-                    Association<String, String> palabraTrad = diccionario.find(temp);
+                    Association<String, String> temp = new Association<>(palabra);
+                    Association<String, String> palabraTrad = diccionario.get(temp.getKey());
 
                     //Si no la encontro en el diccionario, deja la palabra en ingles y le agrega asteriscos
                     if (palabraTrad == null)

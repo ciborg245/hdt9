@@ -1,5 +1,4 @@
-import java.util.NoSuchElementException;
-import java.util.Stack;
+import java.util.Map;
 
 /**
  * Top-Down Splay Tree implementation (http://en.wikipedia.org/wiki/Splay_tree).
@@ -10,14 +9,14 @@ import java.util.Stack;
  *
  * @param <T>
  */
-public class SplayTree<T extends Comparable<T>> implements Map<T>{
+public class SplayTree<T extends Comparable<T>, V>{
 
     private BinaryNode root;
     private final BinaryNode aux;
 
     public SplayTree() {
         root = null;
-        aux = new BinaryNode(null);
+        aux = new BinaryNode(null, null);
     }
 
     /**
@@ -25,16 +24,17 @@ public class SplayTree<T extends Comparable<T>> implements Map<T>{
      * @param <T>
      * @return
      */
-    public static <T extends Comparable<T>> SplayTree<T> create() {
-        return new SplayTree<T>();
+ /*   public static <T extends Comparable<T>> SplayTree<T, V> create() {
+        return new SplayTree<T,V>();
     }
-
+*/
     /**
      * Build a Splay Tree with the given elements
      * @param <T>
      * @param elements
      * @return
      */
+/*
     public static <T extends Comparable<T>> SplayTree<T> create(T... elements) {
         SplayTree<T> tree = new SplayTree<T>();
         for(T element: elements) {
@@ -42,15 +42,16 @@ public class SplayTree<T extends Comparable<T>> implements Map<T>{
         }
         return tree;
     }
-
+*/
     /**
      * Insert the given element into the tree.
      * @param element The element to insert
      * @return False if element already present, true otherwise
      */
-    public boolean insert(T element) {
+
+    public boolean insert(T element, V value) {
         if (root == null) {
-            root = new BinaryNode(element);
+            root = new BinaryNode(element, value);
             return true;
         }
         splay(element);
@@ -60,7 +61,7 @@ public class SplayTree<T extends Comparable<T>> implements Map<T>{
             return false;
         }
 
-        BinaryNode n = new BinaryNode(element);
+        BinaryNode n = new BinaryNode(element, value);
         if (c < 0) {
             n.left = root.left;
             n.right = root;
@@ -127,11 +128,11 @@ public class SplayTree<T extends Comparable<T>> implements Map<T>{
      * @param element The element to find
      * @return
      */
-    public T find(T element) {
+    public V find(T element) {
         if (root == null) return null;
         splay(element);
         if(root.key.compareTo(element) != 0) return null;
-        return root.key;
+        return root.value;
     }
 
     /**
@@ -218,11 +219,13 @@ public class SplayTree<T extends Comparable<T>> implements Map<T>{
     private class BinaryNode {
 
         public final T key;          // The data in the node
+        public final V value;
         public BinaryNode left;         // Left child
         public BinaryNode right;        // Right child
 
-        public BinaryNode(T theKey) {
+        public BinaryNode(T theKey, V theValue) {
             key = theKey;
+            value = theValue;
             left = right = null;
         }
     }
