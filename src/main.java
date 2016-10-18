@@ -39,11 +39,9 @@ public class main {
             }
         }
 
-        // Se utiliza la implementacion de Factory para instanciar el diccinario segun la opcion elegida por el usuario
-        if (resp == 1)
-            diccionario = new SplayTreeMap<>(); //Si hay varias entradas con la misma key el SplayTree guarda el primero encontrado en el archivo
-        else if (resp == 2)
-            diccionario = new OwnHashMap<>(); //Si hay varias entradas con la misma key el HashMap guarda todos los datos pero muestra el ultimo ingresado a la hora de buscar
+        //Factory para instanciar el diccionario
+        //Hash siempre va a utilizar el ultimo valor ingresado a la hora de buscar, mientras que el SplayTree utiliza el primero
+        diccionario = MapFactory.getMap(resp);
 
         //Se trata de leer el archivo en el directorio actual, donde se encuentran los archivos .java
         try (BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir") + "\\Spanish.txt"))) {
@@ -85,7 +83,7 @@ public class main {
 
                 //Se agrega la entrada al arbol
                 Association<String, String> temp = new Association<>(key, value);
-                System.out.println(temp);
+                //System.out.println(temp);
                 diccionario.put(temp.getKey(), temp);
 
                 //Se lee una nueva linea
@@ -120,7 +118,7 @@ public class main {
                 if (Character.isLetter(c)) {
                     palabra += c;
 
-                    //Cuando encuentra algo que no es una letra, se usa la palabra que se fue construyendo para buscarla en el diccionario y traducirla
+                //Cuando encuentra algo que no es una letra, se usa la palabra que se fue construyendo para buscarla en el diccionario y traducirla
                 } else  if (palabra.length() > 0){
                     //Se busca la palabra en el diccionario
                     Association<String, String> temp = new Association<>(palabra);
